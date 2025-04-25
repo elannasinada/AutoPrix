@@ -1,0 +1,360 @@
+:root {
+    --primary-color: #4a6fa5;
+    --primary-dark: #355080;
+    --primary-light: #7fa1d6;
+    --secondary-color: #f39c12;
+    --grey-light: #f5f7fa;
+    --grey-medium: #e1e5eb;
+    --grey-dark: #8c9bab;
+    --text-color: #2c3e50;
+    --white: #ffffff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color);
+    background-color: var(--grey-light);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header Styles */
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: var(--grey-dark);
+}
+
+/* Form Styles */
+.input-section, .results-section {
+    margin-bottom: 3rem;
+}
+
+.form-container, .results-container {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--grey-medium);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+input:focus, select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.next-btn, .submit-btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.next-btn:hover, .submit-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+.back-btn {
+    background-color: var(--grey-medium);
+    color: var(--text-color);
+}
+
+.back-btn:hover {
+    background-color: var(--grey-dark);
+    color: var(--white);
+}
+
+.reset-btn {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    margin: 1.5rem auto 0;
+    display: block;
+}
+
+.reset-btn:hover {
+    opacity: 0.9;
+}
+
+/* Multi-step Form */
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Progress Bar */
+.progress-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.progress-step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--grey-medium);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
+}
+
+.progress-step.active {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.progress-step.completed {
+    background-color: var(--primary-light);
+    color: var(--white);
+}
+
+.progress-line {
+    height: 3px;
+    flex-grow: 1;
+    background-color: var(--grey-medium);
+    margin: 0 -5px;
+    position: relative;
+    z-index: 1;
+}
+
+.progress-line.active {
+    background-color: var(--primary-color);
+}
+
+/* Results Section */
+.results-container {
+    text-align: center;
+}
+
+.results-container.hidden {
+    display: none;
+}
+
+.price-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.price-card {
+    background-color: var(--grey-light);
+    border-radius: 8px;
+    padding: 1.5rem;
+    min-width: 180px;
+    flex: 1;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.price-card:hover {
+    transform: translateY(-5px);
+}
+
+.price-card.primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+    transform: scale(1.05);
+}
+
+.price-card.primary:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+.price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.prediction-info {
+    margin: 1.5rem 0;
+    color: var(--grey-dark);
+    font-size: 0.9rem;
+}
+
+/* Loading Indicator */
+.loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--grey-medium);
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+.loading-indicator p {
+    color: var(--grey-dark);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Error Message */
+.error-message {
+    color: #e74c3c;
+    margin: 2rem 0;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    color: var(--grey-dark);
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .form-container, .results-container {
+        padding: 1.5rem;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .price-cards {
+        flex-direction: column;
+    }
+    
+    .price-card.primary {
+        transform: none;
+    }
+    
+    .price-card.primary:hover {
+        transform: translateY(-5px);
+    }
+    
+    .button-group {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .button-group button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-step {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+}

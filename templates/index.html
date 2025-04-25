@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédicteur de Prix de Voitures d'Occasion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">Prédicteur de Prix de Voitures d'Occasion</h1>
+            <p class="subtitle">Obtenez une estimation du prix de votre véhicule basée sur des modèles d'apprentissage automatique</p>
+        </header>
+        
+        <main>
+            <section class="input-section">
+                <div class="form-container">
+                    <form id="prediction-form" class="prediction-form">
+                        <div class="progress-bar">
+                            <div class="progress-step active" data-step="1">1</div>
+                            <div class="progress-line"></div>
+                            <div class="progress-step" data-step="2">2</div>
+                            <div class="progress-line"></div>
+                            <div class="progress-step" data-step="3">3</div>
+                        </div>
+                        
+                        <div class="form-step active" data-step="1">
+                            <h2>Informations de Base</h2>
+                            <div class="form-group">
+                                <label for="make">Marque</label>
+                                <select id="make" name="make" required>
+                                    <option value="" selected disabled>Sélectionnez une marque</option>
+                                    {% for make in makes %}
+                                    <option value="{{ make }}">{{ make }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="model">Modèle</label>
+                                <select id="model" name="model" required>
+                                    <option value="" selected disabled>Sélectionnez une marque d'abord</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="year">Année</label>
+                                <input type="number" id="year" name="year" min="1970" max="2025" placeholder="ex. 2015" required>
+                            </div>
+                            
+                            <div class="button-group">
+                                <button type="button" class="next-btn">Suivant</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-step" data-step="2">
+                            <h2>Détails Techniques</h2>
+                            <div class="form-group">
+                                <label for="mileage">Kilométrage (km)</label>
+                                <input type="number" id="mileage" name="mileage" min="0" max="500000" placeholder="ex. 75000" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="engine_power">Puissance Fiscale (CV)</label>
+                                <input type="number" id="engine_power" name="engine_power" min="1" max="1000" placeholder="ex. 6" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gearbox">Boîte de Vitesse</label>
+                                <select id="gearbox" name="gearbox" required>
+                                    <option value="" disabled selected>Sélectionnez le type de boîte</option>
+                                    <option value="Manuelle">Manuelle</option>
+                                    <option value="Automatique">Automatique</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="fuel">Carburant</label>
+                                <select id="fuel" name="fuel" required>
+                                    <option value="" disabled selected>Sélectionnez le carburant</option>
+                                    <option value="Diesel">Diesel</option>
+                                    <option value="Essence">Essence</option>
+                                </select>
+                            </div>                            
+                            
+                            <div class="button-group">
+                                <button type="button" class="back-btn">Retour</button>
+                                <button type="button" class="next-btn">Suivant</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-step" data-step="3">
+                            <h2>État</h2>
+                            <div class="form-group">
+                                <label for="condition">État du Véhicule</label>
+                                <select id="condition" name="condition" required>
+                                    <option value="" selected disabled>Sélectionnez un état</option>
+                                    {% for condition in conditions %}
+                                    <option value="{{ condition }}">{{ condition }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="button-group">
+                                <button type="button" class="back-btn">Retour</button>
+                                <button type="submit" class="submit-btn">Obtenir une Estimation</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            
+            <section class="results-section" id="results-section">
+                <div class="results-container hidden" id="results-container">
+                    <div class="loading-indicator" id="loading-indicator">
+                        <div class="spinner"></div>
+                        <p>Calcul du prix en cours...</p>
+                    </div>
+                    
+                    <div class="results-content hidden" id="results-content">
+                        <h2>Prix Estimé</h2>
+                        
+                        <div class="price-cards">
+                            <div class="price-card">
+                                <h3>Régression Linéaire</h3>
+                                <div class="price" id="linear-price">0 DH</div>
+                            </div>
+                            
+                            <div class="price-card primary">
+                                <h3>Moyenne</h3>
+                                <div class="price" id="average-price">0 DH</div>
+                            </div>
+                            
+                            <div class="price-card">
+                                <h3>Lasso</h3>
+                                <div class="price" id="lasso-price">0 DH</div>
+                            </div>
+
+                            <div class="price-card">
+                                <h3>XGBoost</h3>
+                                <div class="price" id="xgboost-price">0 DH</div>
+                            </div>
+                        </div>
+                        
+                        <div class="prediction-info">
+                            <p>Ces estimations sont basées sur des données historiques et peuvent varier des prix réels du marché.</p>
+                        </div>
+                        
+                        <button class="reset-btn" id="reset-btn">Faire une Nouvelle Prédiction</button>
+                    </div>
+                    
+                    <div class="error-message hidden" id="error-message">
+                        <p>Désolé, une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer.</p>
+                        <button class="reset-btn" id="error-reset-btn">Réessayer</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>© 2025 AutoPrix Maroc ❤︎ ENSIAS ❤︎ Tous droits réservés</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+</body>
+</html>
