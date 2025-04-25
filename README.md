@@ -69,6 +69,8 @@ Les modèles ont été entraînés sur un ensemble de données d'annonces de voi
 -État
 -Marque
 -Modèle
+-Carburant
+-Boîte 
 
 ## License
 
