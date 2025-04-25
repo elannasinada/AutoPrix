@@ -103,26 +103,36 @@ def predict():
         processed_data_linear = preprocess_input(form_data, encoders, model_type='linear')
         processed_data_lasso = preprocess_input(form_data, encoders, model_type='lasso')
         processed_data_xgboost = preprocess_input(form_data, encoders, model_type='xgboost')
-        
+
+        # Debugging: print the processed data
+        print(f"[DEBUG] Processed data for Linear Regression: {processed_data_linear}")
+        print(f"[DEBUG] Processed data for Lasso: {processed_data_lasso}")
+        print(f"[DEBUG] Processed data for XGBoost: {processed_data_xgboost}")
+
         # Obtenir les prédictions de tous les modèles
         linear_prediction = linear_pipeline.predict(processed_data_linear)[0]
         lasso_prediction = lasso_pipeline.predict(processed_data_lasso)[0]
         xgboost_prediction = xgboost_pipeline.predict(processed_data_xgboost)[0]
-        
+
+        # Debugging: print the predictions
+        print(f"[DEBUG] Linear Prediction: {linear_prediction}")
+        print(f"[DEBUG] Lasso Prediction: {lasso_prediction}")
+        print(f"[DEBUG] XGBoost Prediction: {xgboost_prediction}")
+
         # S'assurer que les prédictions sont positives
         linear_prediction = max(0, linear_prediction)
         lasso_prediction = max(0, lasso_prediction)
         xgboost_prediction = max(0, xgboost_prediction)
-        
+
         # Arrondir les prédictions au millier le plus proche
         linear_prediction = round(linear_prediction / 1000) * 1000
         lasso_prediction = round(lasso_prediction / 1000) * 1000
         xgboost_prediction = round(xgboost_prediction / 1000) * 1000
-        
+
         # Calculer la prédiction moyenne
         average_prediction = (linear_prediction + lasso_prediction + xgboost_prediction) / 3
         average_prediction = round(average_prediction / 1000) * 1000  # Arrondir également la moyenne
-        
+
         result = {
             'linear_prediction': f"{linear_prediction:,.0f} DH",
             'lasso_prediction': f"{lasso_prediction:,.0f} DH",
@@ -130,9 +140,9 @@ def predict():
             'average_prediction': f"{average_prediction:,.0f} DH",
             'success': True
         }
-        
+
         return jsonify(result)
-    
+
     except Exception as e:
         print(f"Erreur lors de la prédiction: {str(e)}")
         return jsonify({'success': False, 'error': f"Erreur de prédiction: {str(e)}"})
