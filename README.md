@@ -1,6 +1,8 @@
 # Prédicteur de Prix de Voitures d'Occasion
 
-Une application web Flask qui utilise des modèles d'apprentissage automatique (Régression Linéaire et Lasso) pour prédire le prix des voitures d'occasion en fonction de diverses caractéristiques.
+![AutoPrix Maroc](static/img/predictor_screen.png)
+
+Une application web Flask qui utilise des modèles d'apprentissage supervisé (Régression Linéaire, Lasso et XGBoost) pour prédire le prix des voitures d'occasion en fonction de diverses caractéristiques.
 
 
 ## Fonctionnalités
