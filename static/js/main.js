@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = document.getElementById('error-message');
     const linearPrice = document.getElementById('linear-price');
     const lassoPrice = document.getElementById('lasso-price');
+    const xgboostPrice = document.getElementById('xgboost-price');
     const averagePrice = document.getElementById('average-price');
     const resetBtn = document.getElementById('reset-btn');
     const errorResetBtn = document.getElementById('error-reset-btn');
@@ -124,6 +125,11 @@ document.addEventListener('DOMContentLoaded', function() {
         resultsSection.scrollIntoView({ behavior: 'smooth' });
 
         const formData = new FormData(form);
+        // Debug: Log form data before submission
+        console.log("Form Data:");
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
 
         fetch('/predict', {
             method: 'POST',
@@ -137,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         resultsContent.classList.remove('hidden');
                         animatePrice(linearPrice, data.linear_prediction);
                         animatePrice(lassoPrice, data.lasso_prediction);
+                        animatePrice(xgboostPrice, data.xgboost_prediction);
                         animatePrice(averagePrice, data.average_prediction);
                     }, 1500);
                 } else {
@@ -151,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function animatePrice(element, finalPrice) {
-        const numericPrice = parseInt(finalPrice.replace(/,/g, '')) || 0;
+        const numericPrice = parseInt(finalPrice.replace(/[^0-9]/g, '')) || 0;
         let startPrice = 0;
         const duration = 1500;
         const interval = 20;
@@ -162,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             startPrice += increment;
             if (startPrice >= numericPrice) {
                 clearInterval(timer);
-                element.textContent = finalPrice;
+                element.textContent = numericPrice.toLocaleString() + ' DH';
             } else {
                 element.textContent = Math.floor(startPrice).toLocaleString() + ' DH';
             }

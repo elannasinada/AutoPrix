@@ -82,8 +82,31 @@
                                     <option value="" disabled selected>Sélectionnez le carburant</option>
                                     <option value="Diesel">Diesel</option>
                                     <option value="Essence">Essence</option>
+                                    <option value="Hybride">Hybride</option>
+                                    <option value="Electrique">Electrique</option>
+                                    <option value="LPG">LPG</option>
                                 </select>
-                            </div>                            
+                            </div>
+
+                            <!-- New Fields -->
+                            <div class="form-group">
+                                <label for="first_hand">Première Main</label>
+                                <select id="first_hand" name="first_hand" required>
+                                    <option value="" disabled selected>Sélectionnez une option</option>
+                                    <option value="Oui">Oui</option>
+                                    <option value="Non">Non</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="num_doors">Nombre de Portes</label>
+                                <select id="num_doors" name="num_doors" required>
+                                    <option value="" disabled selected>Sélectionnez le nombre de portes</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
                             
                             <div class="button-group">
                                 <button type="button" class="back-btn">Retour</button>

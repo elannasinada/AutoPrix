@@ -45,6 +45,7 @@ python app.py
 - `static/`: Fichiers CSS, JavaScript et autres fichiers statiques
 - `templates/`: Modèles HTML pour l'interface web
 - `data/`: Jeu de données des voitures usagées
+- `pkl-files/`:  Modèles entraînés et transformateurs serialisés
 
 ## Technologies Utilisées
 
@@ -63,14 +64,16 @@ Cette application utilise trois modèles d'apprentissage automatique :
 
 Les modèles ont été entraînés sur un ensemble de données d'annonces de voitures d'occasion au Maroc, avec des caractéristiques incluant :
 
--Année
--Kilométrage
--Puissance du moteur
--État
--Marque
--Modèle
--Carburant
--Boîte 
+- Année
+- Boîte
+- Carburant
+- Kilométrage
+- Marque
+- Modèle
+- Nombre des portres
+- Premiere main
+- Puissance du moteur
+- État
 
 ## License
 

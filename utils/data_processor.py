@@ -1,65 +1,41 @@
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
 
-
-def preprocess_input(form_data, encoders, model_type='linear'):
-    try:
-        # Create a DataFrame with the input data
-        input_df = pd.DataFrame([{
-            'annee': form_data['annee'],
-            'kilometrage': form_data['kilometrage'],
-            'puissance_fiscale': form_data['puissance_fiscale'],
-            'etat': form_data['etat'],
-            'marque': form_data['marque'],
-            'modele': form_data['modele'],
-            'boite': form_data['boite'],
-            'carburant': form_data['carburant']
-        }])
-
-        print("[DEBUG] Raw input data (before encoding):")
-        print(input_df)
-
-        # One-hot encode the input data
-        input_encoded = pd.get_dummies(input_df, drop_first=True)
-
-        print("[DEBUG] Encoded input data (after pd.get_dummies, before matching columns):")
-        print(input_encoded)
-
-        # Select the right columns for the model
-        if model_type == 'linear':
-            columns = encoders['linear_columns']
-        elif model_type == 'lasso':
-            columns = encoders['lasso_columns']
-        elif model_type == 'xgboost':
-            columns = encoders['xgboost_columns']
-        else:
-            raise ValueError(f"Unknown model type: {model_type}")
-
-        print(f"[DEBUG] Selected columns for {model_type} model: {columns}")
-
-        # Add missing columns with zeros
-        for col in columns:
-            if col not in input_encoded:
-                input_encoded[col] = 0
-
-        print("[DEBUG] Final encoded input data (after adding missing columns with zeros):")
-        print(input_encoded)
-
-        # Remove extra columns not used during training
-        extra_cols = set(input_encoded.columns) - set(columns)
-        if extra_cols:
-            input_encoded = input_encoded.drop(columns=list(extra_cols))
-
-        print("[DEBUG] Final encoded input data (after removing extra columns):")
-        print(input_encoded)
-
-        # Reorder to match training order
-        input_encoded = input_encoded[columns]
-
-        print("[DEBUG] Final processed input data (after reordering columns):")
-        print(input_encoded)
-
-        return input_encoded.values
-
-    except Exception as e:
-        print(f"Error in preprocessing: {str(e)}")
-        raise ValueError(f"Preprocessing failed: {str(e)}")
+def preprocess_input(data, encoders, model_type):
+    # Convert input data to DataFrame
+    df = pd.DataFrame([data])
+    
+    # Define categorical and numerical columns
+    categorical_cols = ['etat', 'marque', 'modele', 'boite', 'carburant', 'premiere_main']
+    numeric_cols = ['annee', 'kilometrage', 'puissance_fiscale', 'nombre_portres']
+    
+    # Ensure all columns are present and in the correct type
+    for col in categorical_cols:
+        if col not in df.columns or pd.isna(df[col].iloc[0]):
+            df[col] = 'Unknown'
+        df[col] = df[col].astype(str)
+    
+    for col in numeric_cols:
+        if col not in df.columns or pd.isna(df[col].iloc[0]):
+            df[col] = 0
+        df[col] = df[col].astype(float)
+    
+    # One-hot encode categorical columns
+    df_encoded = pd.get_dummies(df[categorical_cols], drop_first=True)
+    
+    # Combine with numerical columns
+    df_processed = pd.concat([df[numeric_cols], df_encoded], axis=1)
+    
+    # Scale numerical columns
+    scaler = StandardScaler()
+    df_processed[numeric_cols] = scaler.fit_transform(df_processed[numeric_cols])
+    
+    # Align with expected columns from training data
+    expected_cols = encoders.get(f'{model_type}_columns', [])
+    for col in expected_cols:
+        if col not in df_processed.columns:
+            df_processed[col] = 0
+    df_processed = df_processed[expected_cols]
+    
+    return df_processed
